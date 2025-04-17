@@ -304,6 +304,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="BATAL"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bbatalActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
       <AuxValues>
@@ -323,6 +326,9 @@
               </Table>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbl_pelangganMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -337,6 +343,7 @@
     <Component class="javax.swing.JTextField" name="txtcari">
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtcariActionPerformed"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtcariKeyPressed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bcari">
@@ -346,6 +353,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="CARI"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bcariActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bubah">
       <Properties>
@@ -354,6 +364,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="UBAH DATA"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bubahActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bkeluar">
       <Properties>
@@ -362,6 +375,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="KELUAR"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bkeluarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bhapus">
       <Properties>
@@ -370,6 +386,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="HAPUS DATA"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bhapusActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
