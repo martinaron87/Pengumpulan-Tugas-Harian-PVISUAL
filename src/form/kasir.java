@@ -246,7 +246,11 @@ public class kasir extends javax.swing.JFrame {
         jLabel9.setText("Kata Sandi");
         jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        passKasir.setText("jPasswordField1");
+        passKasir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passKasirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -424,7 +428,7 @@ public class kasir extends javax.swing.JFrame {
         }
         
          try {
-        String sql = "update tb_kasir set nm_kasir=?, jns_kelamin=?, no_telepon=?, agama=?, alamat=?, kata_sandi=? where id='"+txt_idKasir.getText()+"'";
+        String sql = "update tb_kasir set nm_kasir=?, jns_kelamin=?, no_telepon=?, agama=?, alamat=?, kata_sandi=? where id_kasir='"+txt_idKasir.getText()+"'";
        
             PreparedStatement stat = conn.prepareStatement(sql);
             stat.setString(1, txt_nmKasir.getText());
@@ -475,7 +479,6 @@ public class kasir extends javax.swing.JFrame {
        String e = tabmode.getValueAt(bar, 4).toString();
        String f = tabmode.getValueAt(bar, 5).toString();
        String g = tabmode.getValueAt(bar, 6).toString();
-       String h = tabmode.getValueAt(bar, 7).toString();
        
        txt_idKasir.setText(a);
        txt_nmKasir.setText(b);
@@ -486,7 +489,9 @@ public class kasir extends javax.swing.JFrame {
        }
        
        txt_telpKasir.setText(d);
-       txt_alamatKasir.setText(e);
+       txt_agamaKasir.setText(e);
+       txt_alamatKasir.setText(f);
+       passKasir.setText(g);
     }//GEN-LAST:event_tbl_kasirMouseClicked
 
     private void txtcariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcariKeyPressed
@@ -495,6 +500,10 @@ public class kasir extends javax.swing.JFrame {
            datatable();
        }
     }//GEN-LAST:event_txtcariKeyPressed
+
+    private void passKasirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passKasirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passKasirActionPerformed
 
     /**
      * @param args the command line arguments
