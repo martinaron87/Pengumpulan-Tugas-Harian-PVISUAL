@@ -146,11 +146,6 @@ public class pelanggan extends javax.swing.JFrame {
         rpria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         rpria.setText("PRIA");
         rpria.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        rpria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rpriaActionPerformed(evt);
-            }
-        });
 
         jenis.add(rwanita);
         rwanita.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -167,11 +162,6 @@ public class pelanggan extends javax.swing.JFrame {
 
         bbatal.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         bbatal.setText("BATAL");
-        bbatal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bbatalActionPerformed(evt);
-            }
-        });
 
         tbl_pelanggan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -184,11 +174,6 @@ public class pelanggan extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tbl_pelanggan.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbl_pelangganMouseClicked(evt);
-            }
-        });
         jScrollPane2.setViewportView(tbl_pelanggan);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -199,43 +184,18 @@ public class pelanggan extends javax.swing.JFrame {
                 txtcariActionPerformed(evt);
             }
         });
-        txtcari.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtcariKeyPressed(evt);
-            }
-        });
 
         bcari.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         bcari.setText("CARI");
-        bcari.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bcariActionPerformed(evt);
-            }
-        });
 
         bubah.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         bubah.setText("UBAH DATA");
-        bubah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bubahActionPerformed(evt);
-            }
-        });
 
         bkeluar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         bkeluar.setText("KELUAR");
-        bkeluar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bkeluarActionPerformed(evt);
-            }
-        });
 
         bhapus.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         bhapus.setText("HAPUS DATA");
-        bhapus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bhapusActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -372,100 +332,6 @@ public class pelanggan extends javax.swing.JFrame {
     private void txtcariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcariActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtcariActionPerformed
-
-    private void bbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbatalActionPerformed
-        // TODO add your handling code here:
-        kosong();
-        datatable();
-    }//GEN-LAST:event_bbatalActionPerformed
-
-    private void rpriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rpriaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rpriaActionPerformed
-
-    private void bcariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcariActionPerformed
-        // TODO add your handling code here:
-        datatable();
-    }//GEN-LAST:event_bcariActionPerformed
-
-    private void bubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bubahActionPerformed
-        // TODO add your handling code here:
-        String jenis = null;
-        if (rpria.isSelected()) {
-            jenis = "Pria";
-        } else if (rwanita.isSelected()) {
-            jenis = "Wanita";
-        }
-        
-         try {
-        String sql = "update pelanggan set nm_pelanggan=?, jenis=?, telepon=?, alamat=? where id='"+txtid.getText()+"'";
-       
-            PreparedStatement stat = conn.prepareStatement(sql);
-            stat.setString(1, txtnama.getText());
-            stat.setString(2, jenis);
-            stat.setString(3, txttelp.getText());
-            stat.setString(4, txtalamat.getText());
-            
-            stat.executeUpdate();
-            JOptionPane.showMessageDialog(null,"data berhasil diubah");
-            kosong();
-            txtid.requestFocus();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "data gagal diubah" + e);
-        }
-        datatable();
-    }//GEN-LAST:event_bubahActionPerformed
-
-    private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
-        // TODO add your handling code here:
-        int oke = JOptionPane.showConfirmDialog(null,"Hapus Data Ini?", "Konfirmasi Penghapusan Data", JOptionPane.YES_NO_OPTION);
-            if (oke == 0) {
-                String sql = "delete from pelanggan where id ='"+txtid.getText()+"'";
-                try {
-                    PreparedStatement stat = conn.prepareStatement(sql);
-                    stat.executeUpdate();
-                    JOptionPane.showMessageDialog(null, "data berhasil dihapus");
-                    kosong();
-                    txtid.requestFocus();
-                } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(null, "data gagal dihapus" + e);
-                }
-                datatable();
-            }
-    }//GEN-LAST:event_bhapusActionPerformed
-
-    private void bkeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bkeluarActionPerformed
-        // TODO add your handling code here:
-        dispose();
-    }//GEN-LAST:event_bkeluarActionPerformed
-
-    private void tbl_pelangganMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_pelangganMouseClicked
-        // TODO add your handling code here:
-        int bar = tbl_pelanggan.getSelectedRow();
-       String a = tabmode.getValueAt(bar, 0).toString();
-       String b = tabmode.getValueAt(bar, 1).toString();
-       String c = tabmode.getValueAt(bar, 2).toString();
-       String d = tabmode.getValueAt(bar, 3).toString();
-       String e = tabmode.getValueAt(bar, 4).toString();
-       
-       txtid.setText(a);
-       txtnama.setText(b);
-       if ("Pria".equals(c)) {
-            rpria.setSelected(true);
-       } else {
-            rwanita.setSelected(true);
-       }
-       
-       txttelp.setText(d);
-       txtalamat.setText(e);
-    }//GEN-LAST:event_tbl_pelangganMouseClicked
-
-    private void txtcariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcariKeyPressed
-        // TODO add your handling code here:
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-           datatable();
-       }
-    }//GEN-LAST:event_txtcariKeyPressed
 
     /**
      * @param args the command line arguments
