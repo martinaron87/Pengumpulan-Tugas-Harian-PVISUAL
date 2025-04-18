@@ -40,6 +40,8 @@ public class kasir extends javax.swing.JFrame {
         txt_nmKasir.setText("");
         txt_telpKasir.setText("");
         txt_alamatKasir.setText("");
+        txt_agamaKasir.setText("");
+        passKasir.setText("");
         txtcari.setText("");
         jns_kelamin.clearSelection();
     }
@@ -51,7 +53,7 @@ public class kasir extends javax.swing.JFrame {
         String cariitem = txtcari.getText();
         
         try {
-            String sql = "SELECT * FROM tb_kasir where id like '%"+cariitem+"%' or nm_kasir like '%"+cariitem+"%' order by id asc";
+            String sql = "SELECT * FROM tb_kasir where id_kasir like '%"+cariitem+"%' or nm_kasir like '%"+cariitem+"%' order by id_kasir asc";
             Statement stat = conn.createStatement();
             ResultSet hasil = stat.executeQuery(sql);
             while (hasil.next()) {
@@ -343,14 +345,14 @@ public class kasir extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(passKasir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(passKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bbatal)
                     .addComponent(bsimpan))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(40, 40, 40)
@@ -434,7 +436,9 @@ public class kasir extends javax.swing.JFrame {
             stat.setString(1, txt_nmKasir.getText());
             stat.setString(2, jns_kelamin);
             stat.setString(3, txt_telpKasir.getText());
-            stat.setString(4, txt_alamatKasir.getText());
+            stat.setString(4, txt_agamaKasir.getText());
+            stat.setString(5, txt_alamatKasir.getText());
+            stat.setString(6, passKasir.getText());
             
             stat.executeUpdate();
             JOptionPane.showMessageDialog(null,"data berhasil diubah");
@@ -450,7 +454,7 @@ public class kasir extends javax.swing.JFrame {
         // TODO add your handling code here:
          int oke = JOptionPane.showConfirmDialog(null,"Hapus Data Ini?", "Konfirmasi Penghapusan Data", JOptionPane.YES_NO_OPTION);
             if (oke == 0) {
-                String sql = "delete from tb_kasir where id ='"+txt_idKasir.getText()+"'";
+                String sql = "delete from tb_kasir where id_kasir ='"+txt_idKasir.getText()+"'";
                 try {
                     PreparedStatement stat = conn.prepareStatement(sql);
                     stat.executeUpdate();
