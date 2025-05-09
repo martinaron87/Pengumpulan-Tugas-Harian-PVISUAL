@@ -17,7 +17,7 @@ import koneksi.koneksi;
  */
 public class barang extends javax.swing.JFrame {
 
-    private final Connection conn = new koneksi().connect();
+    private Connection conn = new koneksi().connect();
     private DefaultTableModel tabmode;
     
     
