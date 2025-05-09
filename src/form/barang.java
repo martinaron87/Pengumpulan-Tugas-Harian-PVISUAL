@@ -17,7 +17,7 @@ import koneksi.koneksi;
  */
 public class barang extends javax.swing.JFrame {
 
-    private Connection conn = new koneksi().connect();
+    private final Connection conn = new koneksi().connect();
     private DefaultTableModel tabmode;
     
     
@@ -64,7 +64,7 @@ public class barang extends javax.swing.JFrame {
             });
             }
             tblBarang.setModel(tabmode);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null,"Data gagal dipanggil" + e);
         }
     }
