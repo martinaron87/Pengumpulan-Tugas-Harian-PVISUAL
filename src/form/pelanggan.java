@@ -217,7 +217,7 @@ public class pelanggan extends javax.swing.JFrame {
         });
 
         bkeluar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        bkeluar.setText("KELUAR");
+        bkeluar.setText("KEMBALI");
         bkeluar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bkeluarActionPerformed(evt);

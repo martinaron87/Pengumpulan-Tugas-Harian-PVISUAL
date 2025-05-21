@@ -207,7 +207,7 @@ public class barang extends javax.swing.JFrame {
             }
         });
 
-        bKeluar.setText("KELUAR");
+        bKeluar.setText("KEMBALI");
         bKeluar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bKeluarActionPerformed(evt);
