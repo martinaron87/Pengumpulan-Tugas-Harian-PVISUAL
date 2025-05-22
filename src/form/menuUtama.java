@@ -82,6 +82,11 @@ public class menuUtama extends javax.swing.JFrame {
         jMenu2.setText("TRANSAKSI");
 
         jMenuItem4.setText("Nota");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem4);
 
         jMenuBar1.add(jMenu2);
@@ -124,24 +129,34 @@ public class menuUtama extends javax.swing.JFrame {
         // TODO add your handling code here:
         barang formBarang = new barang();
         formBarang.setVisible(true);
+        formBarang.setLocationRelativeTo(null);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         pelanggan formPelanggan = new pelanggan();
         formPelanggan.setVisible(true);
+        formPelanggan.setLocationRelativeTo(null);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
         kasir formKasir = new kasir();
         formKasir.setVisible(true);
+        formKasir.setLocationRelativeTo(null);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        nota formNota = new nota();
+        formNota.setVisible(true);
+        formNota.setLocationRelativeTo(null);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -173,7 +188,9 @@ public class menuUtama extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new menuUtama().setVisible(true);
+                menuUtama frame = new menuUtama();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
             }
         });
     }

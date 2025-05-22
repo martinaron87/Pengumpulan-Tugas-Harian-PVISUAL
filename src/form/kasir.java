@@ -24,6 +24,7 @@ public class kasir extends javax.swing.JFrame {
      */
     public kasir() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         kosong();
         aktif();
         datatable();

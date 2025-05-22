@@ -4,20 +4,107 @@
  * and open the template in the editor.
  */
 package form;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import  javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JSpinner;
+import koneksi.koneksi;
 
 /**
  *
  * @author martinaron
  */
 public class nota extends javax.swing.JFrame {
+    public String txtid, txtnama, jenis, txttelp, txtalamat;
+    public String txtKodeBrg, txtNamaBrg, comboJenisBrg, txtHargaBeli, txtHargaJual;
+    private Connection conn = new koneksi().connect();
+    private DefaultTableModel tabmode;
 
     /**
      * Creates new form nota
      */
     public nota() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        // String KD = UserID.getUserLogin();
+        // namaKasir.setText(KD);
+        kosong();
+        aktif();
+        autonumber();
+    }
+    
+//    method nama kasir
+    protected void nama() {
+        try {
+            String sql = "SELECT * FROM tb_kasir WHERE id_kasir='"+idKasir.getText()+"'";
+            Statement stat = conn.createStatement();
+            ResultSet hasil = stat.executeQuery(sql);
+            
+            if(hasil.next()) {
+                namaKasir.setText(hasil.getString("nm_kasir"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "data gagal dipanggil"+e);
+        }   
+    }
+    
+//    method aktif
+    protected void aktif() {
+        jumlahBarang.requestFocus();
+        tanggal.setEditor(new JSpinner.DateEditor(tanggal,"yyyy/MM/dd"));
+        Object[] Baris = {"Kode Barang","Nama","Harga Beli","Harga Jual", "Jumlah","Total"};
+        tabmode = new DefaultTableModel(null, Baris);
+        tabelTransaksi.setModel(tabmode);
+    }
+    
+//    method kosong
+    protected void kosong() {
+        idPelanggan.setText("");
+        namaPelanggan.setText("");
+        alamatPelanggan.setText("");
+        kdBrg.setText("");
+        namaBarang.setText("");
+        hargaBeli.setText("");
+        hargaJual.setText("");
+        jumlahBarang.setText("");
+        totalBarang.setText("");
+    }
+    
+//    method Autonumber
+    protected void autonumber() {
+        try {
+            String sql = "SELECT idnota FROM nota order by idnota asc";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            idNota.setText("IN001");
+            while (rs.next()) {
+                String id_nota;
+                id_nota = rs.getString("idnota").substring(2);
+                int AN = Integer.parseInt(id_nota) + 1;
+                String Nol = "";
+                
+                if(AN<10) 
+                { Nol =  "000"; } 
+                else if(AN<100) 
+                { Nol = "00"; } 
+                else if(AN<1000) 
+                { Nol = "0"; } 
+                else if(AN<10000) 
+                { Nol = ""; } 
+                
+                id_nota.setText("IN" + Nol + AN);
+            }
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(null, "Auto Number Gagal" +e);
+        }
     }
 
+//    method item terpilih pelanggan
+    public void itemTerpilih() {
+        popup_Pelanggan pp = new popup_Pelanggan();
+        pp.plgn = this;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,7 +116,7 @@ public class nota extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        idKasir = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         idNota = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
@@ -42,11 +129,11 @@ public class nota extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         alamatPelanggan = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        namaKasir = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         tanggal = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
-        idPelanggan1 = new javax.swing.JTextField();
+        kdBrg = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         cariBarang = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
@@ -62,7 +149,7 @@ public class nota extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelTransaksi = new javax.swing.JTable();
         simpan = new javax.swing.JButton();
         batal = new javax.swing.JButton();
         hapus = new javax.swing.JButton();
@@ -78,8 +165,7 @@ public class nota extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("ID Kasir");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setText("tempat id kasir");
+        idKasir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("ID Nota");
@@ -157,8 +243,7 @@ public class nota extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Nama Kasir");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel6.setText("tempat nama kasir");
+        namaKasir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel7.setText("Tanggal Nota");
@@ -167,7 +252,7 @@ public class nota extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Barang", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 14))); // NOI18N
 
-        idPelanggan1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        kdBrg.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel11.setText("Kode Barang");
@@ -226,7 +311,7 @@ public class nota extends javax.swing.JFrame {
                             .addComponent(hargaJual, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(hargaBeli, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(idPelanggan1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(kdBrg, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(cariBarang))
                             .addComponent(namaBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -239,7 +324,7 @@ public class nota extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(cariBarang)
-                    .addComponent(idPelanggan1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(kdBrg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
@@ -267,7 +352,7 @@ public class nota extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Transaksi", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 14))); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelTransaksi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -278,7 +363,7 @@ public class nota extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(tabelTransaksi);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -327,7 +412,7 @@ public class nota extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(535, 535, 535)
                 .addComponent(jLabel1)
-                .addContainerGap(577, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -338,21 +423,22 @@ public class nota extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(idNota))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel2)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jLabel3)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(idKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(idNota, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel5)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jLabel6))
+                                        .addComponent(namaKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel7)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -383,9 +469,9 @@ public class nota extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3)
+                    .addComponent(idKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6))
+                    .addComponent(namaKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -461,9 +547,9 @@ public class nota extends javax.swing.JFrame {
     private javax.swing.JButton hapus;
     private javax.swing.JTextField hargaBeli;
     private javax.swing.JTextField hargaJual;
+    private javax.swing.JLabel idKasir;
     private javax.swing.JTextField idNota;
     private javax.swing.JTextField idPelanggan;
-    private javax.swing.JTextField idPelanggan1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -475,10 +561,8 @@ public class nota extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -487,12 +571,14 @@ public class nota extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jumlahBarang;
+    private javax.swing.JTextField kdBrg;
     private javax.swing.JButton keluar;
     private javax.swing.JTextField namaBarang;
+    private javax.swing.JLabel namaKasir;
     private javax.swing.JTextField namaPelanggan;
     private javax.swing.JButton simpan;
+    private javax.swing.JTable tabelTransaksi;
     private javax.swing.JSpinner tanggal;
     private javax.swing.JTextField totalBarang;
     private javax.swing.JTextField totalHarga;

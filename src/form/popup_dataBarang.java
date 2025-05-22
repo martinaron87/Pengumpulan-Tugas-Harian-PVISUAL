@@ -17,6 +17,7 @@ public class popup_dataBarang extends javax.swing.JFrame {
      */
     public popup_dataBarang() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**

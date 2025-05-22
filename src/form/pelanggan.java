@@ -26,6 +26,7 @@ public class pelanggan extends javax.swing.JFrame {
 //    method pelanggan
     public pelanggan() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         kosong();
         aktif();
         datatable();
