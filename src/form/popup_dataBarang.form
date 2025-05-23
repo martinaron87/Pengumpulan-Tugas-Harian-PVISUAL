@@ -28,9 +28,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jScrollPane1" pref="541" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="nmPelanggan" min="-2" pref="129" max="-2" attributes="0"/>
+                      <Component id="txtcari" min="-2" pref="129" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="cariPelanggan" min="-2" max="-2" attributes="0"/>
+                      <Component id="cariBrg" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -43,8 +43,8 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="nmPelanggan" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cariPelanggan" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtcari" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cariBrg" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="209" max="-2" attributes="0"/>
@@ -61,7 +61,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="tblPelanggan">
+        <Component class="javax.swing.JTable" name="tbl_barang">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="4" rowCount="4">
@@ -72,17 +72,23 @@
               </Table>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbl_barangMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JTextField" name="nmPelanggan">
+    <Component class="javax.swing.JTextField" name="txtcari">
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtcariKeyPressed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="cariPelanggan">
+    <Component class="javax.swing.JButton" name="cariBrg">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cari"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cariPelangganActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cariBrgActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

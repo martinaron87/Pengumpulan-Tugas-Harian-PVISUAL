@@ -1,4 +1,10 @@
 package form;
+import java.sql.*;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.KeyEvent;
+import form.nota;
+import koneksi.koneksi;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -11,13 +17,41 @@ package form;
  * @author Windows 10
  */
 public class popup_Pelanggan extends javax.swing.JFrame {
+private Connection conn =new koneksi().connect();
+private DefaultTableModel tabmode;
 
+public nota plgn = null;
     /**
      * Creates new form popup_Pelanggan
      */
     public popup_Pelanggan() {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        datatable();
+    }
+    
+//    mtehod data table
+    protected void datatable() {
+        Object [] Baris = {"ID Pelanggan", "Nama", "Jenis Kelamin", "No. Telepon", "Alamat"};
+        tabmode = new DefaultTableModel(null, Baris);
+        String cariitem = nmBrg.getText();
+        
+        try {
+            String sql = "SELECT * FROM pelanggan where id like '%"+cariitem+"%' or nm_pelanggan like '%"+cariitem+"%' order by id asc";
+            Statement stat = conn.createStatement();
+            ResultSet hasil = stat.executeQuery(sql);
+            while (hasil.next()) {
+                tabmode.addRow(new Object[] {
+                    hasil.getString(1),
+                    hasil.getString(2),
+                    hasil.getString(3),
+                    hasil.getString(4),
+                    hasil.getString(5)
+            });
+            } tbl_pelanggan.setModel(tabmode);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,"Data gagal dipanggil" + e);
+        }
     }
 
     /**
@@ -30,13 +64,13 @@ public class popup_Pelanggan extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblBrg = new javax.swing.JTable();
+        tbl_pelanggan = new javax.swing.JTable();
         nmBrg = new javax.swing.JTextField();
         cariBrg = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        tblBrg.setModel(new javax.swing.table.DefaultTableModel(
+        tbl_pelanggan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -47,7 +81,18 @@ public class popup_Pelanggan extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblBrg);
+        tbl_pelanggan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_pelangganMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbl_pelanggan);
+
+        nmBrg.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nmBrgKeyPressed(evt);
+            }
+        });
 
         cariBrg.setText("Cari");
         cariBrg.addActionListener(new java.awt.event.ActionListener() {
@@ -88,7 +133,27 @@ public class popup_Pelanggan extends javax.swing.JFrame {
 
     private void cariBrgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cariBrgActionPerformed
         // TODO add your handling code here:
+        datatable();
     }//GEN-LAST:event_cariBrgActionPerformed
+
+    private void tbl_pelangganMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_pelangganMouseClicked
+        // TODO add your handling code here:
+        int tabelpelanggan = tbl_pelanggan.getSelectedRow();
+        plgn.id = tbl_pelanggan.getValueAt(tabelpelanggan, 0).toString();
+        plgn.nama = tbl_pelanggan.getValueAt(tabelpelanggan, 1).toString();
+        plgn.jenis = tbl_pelanggan.getValueAt(tabelpelanggan, 2).toString();
+        plgn.telp = tbl_pelanggan.getValueAt(tabelpelanggan, 3).toString();
+        plgn.almt = tbl_pelanggan.getValueAt(tabelpelanggan, 4).toString();
+        plgn.itemTerpilih();
+        this.dispose();
+    }//GEN-LAST:event_tbl_pelangganMouseClicked
+
+    private void nmBrgKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nmBrgKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            datatable();
+        }
+    }//GEN-LAST:event_nmBrgKeyPressed
 
     /**
      * @param args the command line arguments
@@ -129,6 +194,6 @@ public class popup_Pelanggan extends javax.swing.JFrame {
     private javax.swing.JButton cariBrg;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nmBrg;
-    private javax.swing.JTable tblBrg;
+    private javax.swing.JTable tbl_pelanggan;
     // End of variables declaration//GEN-END:variables
 }

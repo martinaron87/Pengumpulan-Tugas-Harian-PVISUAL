@@ -4,9 +4,10 @@
  * and open the template in the editor.
  */
 package form;
+
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import  javax.swing.JOptionPane;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JSpinner;
 import koneksi.koneksi;
@@ -16,8 +17,9 @@ import koneksi.koneksi;
  * @author martinaron
  */
 public class nota extends javax.swing.JFrame {
-    public String txtid, txtnama, jenis, txttelp, txtalamat;
-    public String txtKodeBrg, txtNamaBrg, comboJenisBrg, txtHargaBeli, txtHargaJual;
+
+    public String id, nama, jenis, telp, almt;
+    public String kdbrg, nmbrg, jenisbrg, hb, hj;
     private Connection conn = new koneksi().connect();
     private DefaultTableModel tabmode;
 
@@ -33,31 +35,31 @@ public class nota extends javax.swing.JFrame {
         aktif();
         autonumber();
     }
-    
+
 //    method nama kasir
     protected void nama() {
         try {
-            String sql = "SELECT * FROM tb_kasir WHERE id_kasir='"+idKasir.getText()+"'";
+            String sql = "SELECT * FROM tb_kasir WHERE id_kasir='" + idKasir.getText() + "'";
             Statement stat = conn.createStatement();
             ResultSet hasil = stat.executeQuery(sql);
-            
-            if(hasil.next()) {
+
+            if (hasil.next()) {
                 namaKasir.setText(hasil.getString("nm_kasir"));
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "data gagal dipanggil"+e);
-        }   
+            JOptionPane.showMessageDialog(null, "data gagal dipanggil" + e);
+        }
     }
-    
+
 //    method aktif
     protected void aktif() {
         jumlahBarang.requestFocus();
-        tanggal.setEditor(new JSpinner.DateEditor(tanggal,"yyyy/MM/dd"));
-        Object[] Baris = {"Kode Barang","Nama","Harga Beli","Harga Jual", "Jumlah","Total"};
+        tanggal.setEditor(new JSpinner.DateEditor(tanggal, "yyyy/MM/dd"));
+        Object[] Baris = {"Kode Barang", "Nama", "Harga Beli", "Harga Jual", "Jumlah", "Total"};
         tabmode = new DefaultTableModel(null, Baris);
         tabelTransaksi.setModel(tabmode);
     }
-    
+
 //    method kosong
     protected void kosong() {
         idPelanggan.setText("");
@@ -70,7 +72,7 @@ public class nota extends javax.swing.JFrame {
         jumlahBarang.setText("");
         totalBarang.setText("");
     }
-    
+
 //    method Autonumber
     protected void autonumber() {
         try {
@@ -83,20 +85,21 @@ public class nota extends javax.swing.JFrame {
                 id_nota = rs.getString("idnota").substring(2);
                 int AN = Integer.parseInt(id_nota) + 1;
                 String Nol = "";
-                
-                if(AN<10) 
-                { Nol =  "000"; } 
-                else if(AN<100) 
-                { Nol = "00"; } 
-                else if(AN<1000) 
-                { Nol = "0"; } 
-                else if(AN<10000) 
-                { Nol = ""; } 
-                
-                id_nota.setText("IN" + Nol + AN);
+
+                if (AN < 10) {
+                    Nol = "000";
+                } else if (AN < 100) {
+                    Nol = "00";
+                } else if (AN < 1000) {
+                    Nol = "0";
+                } else if (AN < 10000) {
+                    Nol = "";
+                }
+
+                idNota.setText("IN" + Nol + AN);
             }
-        } catch(Exception e) {
-            JOptionPane.showMessageDialog(null, "Auto Number Gagal" +e);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Auto Number Gagal" + e);
         }
     }
 
@@ -104,6 +107,28 @@ public class nota extends javax.swing.JFrame {
     public void itemTerpilih() {
         popup_Pelanggan pp = new popup_Pelanggan();
         pp.plgn = this;
+        idPelanggan.setText(id);
+        namaPelanggan.setText(nama);
+        alamatPelanggan.setText(almt);
+    }
+
+//    method item terpilh barang
+    public void itemTerpilihBrg() {
+        popup_dataBarang pbrg = new popup_dataBarang();
+        kdBrg.setText(kdbrg);
+        namaBarang.setText(nmbrg);
+        hargaBeli.setText(hb);
+        hargaJual.setText(hj);
+        jumlahBarang.requestFocus();
+    }
+    
+    //    method hitung
+    public void hitung() {
+        int total = 0;
+        for(int i = 0; i < tabelTransaksi.getRowCount(); i++) {
+            int amount = Integer.valueOf(tabelTransaksi.getValueAt(i,5).toString());
+            total += amount;
+        } totalBarang.setText(Integer.toString(total));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -146,7 +171,7 @@ public class nota extends javax.swing.JFrame {
         jumlahBarang = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         totalBarang = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        tambah = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelTransaksi = new javax.swing.JTable();
@@ -181,6 +206,11 @@ public class nota extends javax.swing.JFrame {
 
         cariPelanggan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cariPelanggan.setText("Cari");
+        cariPelanggan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cariPelangganActionPerformed(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel9.setText("Nama");
@@ -259,6 +289,11 @@ public class nota extends javax.swing.JFrame {
 
         cariBarang.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cariBarang.setText("Cari");
+        cariBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cariBarangActionPerformed(evt);
+            }
+        });
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel12.setText("Nama");
@@ -279,14 +314,24 @@ public class nota extends javax.swing.JFrame {
         jLabel15.setText("Jumlah");
 
         jumlahBarang.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jumlahBarang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jumlahBarangActionPerformed(evt);
+            }
+        });
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel16.setText("Total");
 
         totalBarang.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton1.setText("Tambah");
+        tambah.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tambah.setText("Tambah");
+        tambah.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tambahActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -295,7 +340,7 @@ public class nota extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tambah, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11)
@@ -346,7 +391,7 @@ public class nota extends javax.swing.JFrame {
                     .addComponent(jLabel16)
                     .addComponent(totalBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(tambah)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -384,12 +429,27 @@ public class nota extends javax.swing.JFrame {
 
         simpan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         simpan.setText("SIMPAN");
+        simpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                simpanActionPerformed(evt);
+            }
+        });
 
         batal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         batal.setText("BATAL");
+        batal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                batalActionPerformed(evt);
+            }
+        });
 
         hapus.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         hapus.setText("HAPUS");
+        hapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hapusActionPerformed(evt);
+            }
+        });
 
         keluar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         keluar.setText("KEMBALI");
@@ -467,11 +527,12 @@ public class nota extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(idKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(namaKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(idKasir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel5)
+                        .addComponent(namaKasir, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -503,6 +564,110 @@ public class nota extends javax.swing.JFrame {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_keluarActionPerformed
+
+    private void batalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batalActionPerformed
+        // TODO add your handling code here:
+        kosong();
+        aktif();
+        autonumber();
+    }//GEN-LAST:event_batalActionPerformed
+
+    private void cariPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cariPelangganActionPerformed
+        // TODO add your handling code here:
+        popup_Pelanggan pp = new popup_Pelanggan();
+        pp.plgn = this;
+        pp.setVisible(true);
+        pp.setResizable(false);
+    }//GEN-LAST:event_cariPelangganActionPerformed
+
+    private void cariBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cariBarangActionPerformed
+        // TODO add your handling code here:
+        popup_dataBarang pbrg = new popup_dataBarang();
+        pbrg.brg = this;
+        pbrg.setVisible(true);
+        pbrg.setResizable(false);
+    }//GEN-LAST:event_cariBarangActionPerformed
+
+    private void jumlahBarangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jumlahBarangActionPerformed
+        // TODO add your handling code here:
+        int xhrgj = Integer.parseInt(hargaJual.getText());
+        int xqty = Integer.parseInt(jumlahBarang.getText());
+        int xjml = xhrgj*xqty;
+        totalBarang.setText(String.valueOf(xjml));
+    }//GEN-LAST:event_jumlahBarangActionPerformed
+
+    private void tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tambahActionPerformed
+        // TODO add your handling code here:
+        try {
+            String kode = kdBrg.getText();
+            String nama = namaBarang.getText();
+            int hargab = Integer.parseInt(hargaBeli.getText());
+            int hargaj = Integer.parseInt(hargaJual.getText());
+            int qty = Integer.parseInt(jumlahBarang.getText());
+            int total = Integer.parseInt(totalBarang.getText());
+            
+            tabmode.addRow(new Object[]{kode, nama, hargab, hargaj, qty, total});
+            tabelTransaksi.setModel(tabmode);
+        } catch(Exception e) {
+            System.out.println("Error : "+e);
+        }
+        kdBrg.setText("");
+        namaBarang.setText("");
+        hargaBeli.setText("");
+        hargaJual.setText("");
+        jumlahBarang.setText("");
+        totalBarang.setText("");
+        hitung();
+    }//GEN-LAST:event_tambahActionPerformed
+
+    private void hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hapusActionPerformed
+        // TODO add your handling code here:
+        int index = tabelTransaksi.getSelectedRow();
+        tabmode.removeRow(index);
+        tabelTransaksi.setModel(tabmode);
+        hitung();
+    }//GEN-LAST:event_hapusActionPerformed
+
+    private void simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanActionPerformed
+        // TODO add your handling code here:
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String fd = sdf.format(tanggal.getValue());
+        String sql = "insert into nota values (?,?,?,?)";
+        String zsql = "insert into isi values (?,?,?,?,?)";
+        
+        try {
+            PreparedStatement stat = conn.prepareStatement(sql);
+            stat.setString(1, idNota.getText());
+            stat.setString(2, fd);
+            stat.setString(3, idPelanggan.getText());
+            stat.setString(4, idKasir.getText());
+            
+            stat.executeUpdate();
+            
+            
+            int t =tabelTransaksi.getRowCount();
+            for (int i = 0; i < t; i++) {
+                String xkd = tabelTransaksi.getValueAt(i, 0).toString();
+                String xhb = tabelTransaksi.getValueAt(i, 2).toString();
+                String xhj = tabelTransaksi.getValueAt(i, 3).toString();
+                String xqty = tabelTransaksi.getValueAt(i, 4).toString();
+                
+                PreparedStatement stat2 = conn.prepareStatement(zsql);
+                stat2.setString(1, idNota.getText());
+                stat2.setString(2, xkd);
+                stat2.setString(3, xhb);
+                stat2.setString(4, xhj);
+                stat2.setString(5, xqty);
+                
+                stat2.executeUpdate();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "data gagal disimpan "+e);
+        }
+        kosong();
+        aktif();
+        autonumber();
+    }//GEN-LAST:event_simpanActionPerformed
 
     /**
      * @param args the command line arguments
@@ -550,7 +715,6 @@ public class nota extends javax.swing.JFrame {
     private javax.swing.JLabel idKasir;
     private javax.swing.JTextField idNota;
     private javax.swing.JTextField idPelanggan;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -579,6 +743,7 @@ public class nota extends javax.swing.JFrame {
     private javax.swing.JTextField namaPelanggan;
     private javax.swing.JButton simpan;
     private javax.swing.JTable tabelTransaksi;
+    private javax.swing.JButton tambah;
     private javax.swing.JSpinner tanggal;
     private javax.swing.JTextField totalBarang;
     private javax.swing.JTextField totalHarga;

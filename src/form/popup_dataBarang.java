@@ -1,4 +1,10 @@
 package form;
+import java.sql.*;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.KeyEvent;
+import form.nota;
+import koneksi.koneksi;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -11,13 +17,42 @@ package form;
  * @author Windows 10
  */
 public class popup_dataBarang extends javax.swing.JFrame {
+private Connection conn =new koneksi().connect();
+private DefaultTableModel tabmode;
 
+public nota brg = null;
     /**
      * Creates new form popup_dataBarang
      */
     public popup_dataBarang() {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        datatable();
+    }
+    
+//    datatable
+    protected void datatable() {
+        Object[] baris = {"Kode Barang", "Nama Barang", "Jenis Barang", "Harga Beli", "Harga Jual"};
+        tabmode = new DefaultTableModel(null, baris);
+        String cariitem = txtcari.getText();
+
+        try {
+            String sql = "SELECT * FROM tb_barang where kd_brg like '%" + cariitem + "%' or nm_brg like '%" + cariitem + "%' order by kd_brg asc";
+            java.sql.Statement stat = conn.createStatement();
+            ResultSet hasil = stat.executeQuery(sql);
+            while (hasil.next()) {
+                tabmode.addRow(new Object[]{
+                    hasil.getString(1),
+                    hasil.getString(2),
+                    hasil.getString(3),
+                    hasil.getString(4),
+                    hasil.getString(5)
+                });
+            }
+            tbl_barang.setModel(tabmode);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Data gagal dipanggil" + e);
+        }
     }
 
     /**
@@ -30,13 +65,13 @@ public class popup_dataBarang extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblPelanggan = new javax.swing.JTable();
-        nmPelanggan = new javax.swing.JTextField();
-        cariPelanggan = new javax.swing.JButton();
+        tbl_barang = new javax.swing.JTable();
+        txtcari = new javax.swing.JTextField();
+        cariBrg = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        tblPelanggan.setModel(new javax.swing.table.DefaultTableModel(
+        tbl_barang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -47,12 +82,23 @@ public class popup_dataBarang extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblPelanggan);
+        tbl_barang.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_barangMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbl_barang);
 
-        cariPelanggan.setText("Cari");
-        cariPelanggan.addActionListener(new java.awt.event.ActionListener() {
+        txtcari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtcariKeyPressed(evt);
+            }
+        });
+
+        cariBrg.setText("Cari");
+        cariBrg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cariPelangganActionPerformed(evt);
+                cariBrgActionPerformed(evt);
             }
         });
 
@@ -65,9 +111,9 @@ public class popup_dataBarang extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 541, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(nmPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtcari, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cariPelanggan)
+                        .addComponent(cariBrg)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -76,8 +122,8 @@ public class popup_dataBarang extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nmPelanggan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cariPelanggan))
+                    .addComponent(txtcari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cariBrg))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -86,9 +132,29 @@ public class popup_dataBarang extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cariPelangganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cariPelangganActionPerformed
+    private void cariBrgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cariBrgActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cariPelangganActionPerformed
+        datatable();
+    }//GEN-LAST:event_cariBrgActionPerformed
+
+    private void txtcariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcariKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            datatable();
+        }
+    }//GEN-LAST:event_txtcariKeyPressed
+
+    private void tbl_barangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_barangMouseClicked
+        // TODO add your handling code here:
+        int tabelpelanggan = tbl_barang.getSelectedRow();
+        brg.kdbrg = tbl_barang.getValueAt(tabelpelanggan, 0).toString();
+        brg.nmbrg = tbl_barang.getValueAt(tabelpelanggan, 1).toString();
+        brg.jenisbrg = tbl_barang.getValueAt(tabelpelanggan, 2).toString();
+        brg.hb = tbl_barang.getValueAt(tabelpelanggan, 3).toString();
+        brg.hj = tbl_barang.getValueAt(tabelpelanggan, 4).toString();
+        brg.itemTerpilih();
+        this.dispose();
+    }//GEN-LAST:event_tbl_barangMouseClicked
 
     /**
      * @param args the command line arguments
@@ -126,9 +192,9 @@ public class popup_dataBarang extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cariPelanggan;
+    private javax.swing.JButton cariBrg;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField nmPelanggan;
-    private javax.swing.JTable tblPelanggan;
+    private javax.swing.JTable tbl_barang;
+    private javax.swing.JTextField txtcari;
     // End of variables declaration//GEN-END:variables
 }
