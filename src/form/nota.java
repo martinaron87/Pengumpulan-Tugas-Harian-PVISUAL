@@ -29,8 +29,9 @@ public class nota extends javax.swing.JFrame {
     public nota() {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        // String KD = UserID.getUserLogin();
-        // namaKasir.setText(KD);
+        String KD = userID.getUserLogin();
+        idKasir.setText(KD);
+        nama();
         kosong();
         aktif();
         autonumber();
@@ -70,7 +71,7 @@ public class nota extends javax.swing.JFrame {
         hargaBeli.setText("");
         hargaJual.setText("");
         jumlahBarang.setText("");
-        totalBarang.setText("");
+        sub_total.setText("");
     }
 
 //    method Autonumber
@@ -98,7 +99,7 @@ public class nota extends javax.swing.JFrame {
 
                 idNota.setText("IN" + Nol + AN);
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException | SQLException e) {
             JOptionPane.showMessageDialog(null, "Auto Number Gagal" + e);
         }
     }
@@ -128,7 +129,7 @@ public class nota extends javax.swing.JFrame {
         for(int i = 0; i < tabelTransaksi.getRowCount(); i++) {
             int amount = Integer.valueOf(tabelTransaksi.getValueAt(i,5).toString());
             total += amount;
-        } totalBarang.setText(Integer.toString(total));
+        } totalHarga.setText(Integer.toString(total));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -170,7 +171,7 @@ public class nota extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         jumlahBarang = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        totalBarang = new javax.swing.JTextField();
+        sub_total = new javax.swing.JTextField();
         tambah = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -196,6 +197,11 @@ public class nota extends javax.swing.JFrame {
         jLabel4.setText("ID Nota");
 
         idNota.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        idNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idNotaActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Data Pelanggan", javax.swing.border.TitledBorder.LEADING, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 14))); // NOI18N
 
@@ -321,9 +327,14 @@ public class nota extends javax.swing.JFrame {
         });
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel16.setText("Total");
+        jLabel16.setText("Sub Total");
 
-        totalBarang.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        sub_total.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        sub_total.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sub_totalActionPerformed(evt);
+            }
+        });
 
         tambah.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tambah.setText("Tambah");
@@ -351,7 +362,7 @@ public class nota extends javax.swing.JFrame {
                             .addComponent(jLabel16))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(totalBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sub_total, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jumlahBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(hargaJual, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(hargaBeli, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -389,7 +400,7 @@ public class nota extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(totalBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(sub_total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(tambah)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -593,7 +604,7 @@ public class nota extends javax.swing.JFrame {
         int xhrgj = Integer.parseInt(hargaJual.getText());
         int xqty = Integer.parseInt(jumlahBarang.getText());
         int xjml = xhrgj*xqty;
-        totalBarang.setText(String.valueOf(xjml));
+        sub_total.setText(String.valueOf(xjml));
     }//GEN-LAST:event_jumlahBarangActionPerformed
 
     private void tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tambahActionPerformed
@@ -604,7 +615,7 @@ public class nota extends javax.swing.JFrame {
             int hargab = Integer.parseInt(hargaBeli.getText());
             int hargaj = Integer.parseInt(hargaJual.getText());
             int qty = Integer.parseInt(jumlahBarang.getText());
-            int total = Integer.parseInt(totalBarang.getText());
+            int total = Integer.parseInt(sub_total.getText());
             
             tabmode.addRow(new Object[]{kode, nama, hargab, hargaj, qty, total});
             tabelTransaksi.setModel(tabmode);
@@ -616,7 +627,7 @@ public class nota extends javax.swing.JFrame {
         hargaBeli.setText("");
         hargaJual.setText("");
         jumlahBarang.setText("");
-        totalBarang.setText("");
+        sub_total.setText("");
         hitung();
     }//GEN-LAST:event_tambahActionPerformed
 
@@ -668,6 +679,19 @@ public class nota extends javax.swing.JFrame {
         aktif();
         autonumber();
     }//GEN-LAST:event_simpanActionPerformed
+
+    private void idNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idNotaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idNotaActionPerformed
+
+    private void sub_totalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sub_totalActionPerformed
+        // TODO add your handling code here:
+        int hargajual = Integer.parseInt(hargaJual.getText());
+        int jumlah = Integer.parseInt(jumlahBarang.getText());
+        int sub = hargajual * jumlah;
+        
+        sub_total.setText(String.valueOf(sub));
+    }//GEN-LAST:event_sub_totalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -742,10 +766,10 @@ public class nota extends javax.swing.JFrame {
     private javax.swing.JLabel namaKasir;
     private javax.swing.JTextField namaPelanggan;
     private javax.swing.JButton simpan;
+    private javax.swing.JTextField sub_total;
     private javax.swing.JTable tabelTransaksi;
     private javax.swing.JButton tambah;
     private javax.swing.JSpinner tanggal;
-    private javax.swing.JTextField totalBarang;
     private javax.swing.JTextField totalHarga;
     // End of variables declaration//GEN-END:variables
 }

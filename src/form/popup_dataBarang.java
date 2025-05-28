@@ -152,7 +152,7 @@ public nota brg = null;
         brg.jenisbrg = tbl_barang.getValueAt(tabelpelanggan, 2).toString();
         brg.hb = tbl_barang.getValueAt(tabelpelanggan, 3).toString();
         brg.hj = tbl_barang.getValueAt(tabelpelanggan, 4).toString();
-        brg.itemTerpilih();
+        brg.itemTerpilihBrg();
         this.dispose();
     }//GEN-LAST:event_tbl_barangMouseClicked
 
