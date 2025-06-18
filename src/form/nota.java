@@ -7,10 +7,14 @@ package form;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JSpinner;
 import koneksi.koneksi;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -80,7 +84,7 @@ public class nota extends javax.swing.JFrame {
             String sql = "SELECT idnota FROM nota order by idnota asc";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            idNota.setText("IN001");
+            idNota.setText("IN0001");
             while (rs.next()) {
                 String id_nota;
                 id_nota = rs.getString("idnota").substring(2);
@@ -131,6 +135,20 @@ public class nota extends javax.swing.JFrame {
             total += amount;
         } totalHarga.setText(Integer.toString(total));
     }
+    
+//    method cetak
+    public void cetak() {
+        try {
+            String path = "F:\\Documents\\NetBeansProjects\\penjualan\\src\\nota.jasper";
+            HashMap parameter = new HashMap();
+            parameter.put("id_nota", idNota.getText());
+            JasperPrint print = JasperFillManager.fillReport(path, parameter,conn);
+            JasperViewer.viewReport(print, false);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(rootPane,"Dokumen tidak ada "+ex);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -672,6 +690,8 @@ public class nota extends javax.swing.JFrame {
                 
                 stat2.executeUpdate();
             }
+         JOptionPane.showMessageDialog(null, "data berhasil disimpan");
+         cetak();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "data gagal disimpan "+e);
         }
